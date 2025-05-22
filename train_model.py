@@ -15,12 +15,15 @@ stop_words = set(stopwords.words("english"))
 # 4. 뉴스 + 가격 CSV 불러오기
 daily = pd.read_csv("/content/dailycoffeenews_250503.csv")
 portal = pd.read_csv("/content/worldcoffeeportal_250503.csv")
+fao = pd.read_csv("/content/fao_250503.csv")
 price_df = pd.read_csv("/content/coffee_c_price.csv")
 
 # 5. 뉴스 병합
 daily["date"] = pd.to_datetime(daily["date"])
 portal["date"] = pd.to_datetime(portal["date"])
-news_df = pd.concat([daily, portal], ignore_index=True)
+fao["date"] = pd.to_datetime(fao["date"])
+
+news_df = pd.concat([daily, portal, fao], ignore_index=True)
 grouped = news_df.groupby("date")["title"].apply(lambda x: " ".join(x.astype(str))).reset_index()
 grouped = grouped.rename(columns={"title": "combined_titles"})
 
