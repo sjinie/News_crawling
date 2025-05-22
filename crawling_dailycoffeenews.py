@@ -9,16 +9,16 @@ from dateutil.parser import parse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
-today_str = datetime.now().strftime('%y%m%d')
-filename = f'./data/dailycoffeenews_{today_str}.csv'
-
-if os.path.exists(filename):
-    print(f"[중단] 오늘({today_str}) 파일이 이미 존재합니다. 수집을 건너뜁니다.")
-    exit()
-
 # 날짜 범위 설정
 start_date = datetime(2015, 1, 1)
 end_date = datetime(2025, 3, 31)
+
+filename = f'./data/dailycoffeenews_{end_date.strftime('%y%m%d')}.csv'
+initial_url = "https://dailycoffeenews.com/latest-news/"
+
+if os.path.exists(filename):
+    print(f"[중단] {filename} 파일이 이미 존재합니다. 수집을 건너뜁니다.")
+    exit()
 
 # 크롬 드라이버 설정
 chrome_options = Options()
@@ -27,7 +27,7 @@ chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--no-sandbox')
 driver = webdriver.Chrome(options=chrome_options)
 
-driver.get("https://dailycoffeenews.com/latest-news/")
+driver.get(initial_url)
 time.sleep(3)
 
 article_data = []
